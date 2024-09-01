@@ -9,6 +9,7 @@ export default {
         './vendor/laravel/jetstream/**/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './src/**/*.{html,js}',  // Esta línea proviene de tu otra configuración
     ],
 
     theme: {
@@ -16,8 +17,14 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            // Puedes añadir más extensiones aquí si es necesario
         },
     },
 
     plugins: [forms, typography],
+
+    corePlugins: {
+        // Desactivar el plugin container
+        container: false,
+    },
 };

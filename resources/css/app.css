@@ -1,7 +1,12 @@
+/* Importa archivos CSS personalizados aquí */
+@import './commom.css'; /* Asegúrate de que la ruta sea correcta */
+
+/* Directivas de Tailwind CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Reglas CSS personalizadas */
 [x-cloak] {
     display: none;
 }
