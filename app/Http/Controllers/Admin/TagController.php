@@ -23,7 +23,18 @@ class TagController extends Controller
      */
     public function create()
     {
-        return view ('admin.tags.create');
+
+
+        $colors= [
+            'red' => 'Color Red',
+            'yellow' => 'Color Yellow',
+            'green' => 'Color Green',
+            'blue' => 'Color Blue',
+            'indigo' => 'Color indigo',
+            'purple' => 'Color purple',
+            'pink' => 'Color pink',
+        ];        
+        return view ('admin.tags.create', compact('colors'));
     }
 
     /**
@@ -31,7 +42,14 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|unique:tags',
+            'color' => 'required',
+        ]);
+
+        $tag = Tag::create($request->all());
+        return redirect()->route('admin.tags.edit', compact('tag'))->with('info','The tag was created');
     }
 
     /**
@@ -47,7 +65,17 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        return view ('admin.tags.edit', compact('tag'));
+        $colors= [
+            'red' => 'Color Red',
+            'yellow' => 'Color Yellow',
+            'green' => 'Color Green',
+            'blue' => 'Color Blue',
+            'indigo' => 'Color indigo',
+            'purple' => 'Color purple',
+            'pink' => 'Color pink',
+        ];  
+
+        return view ('admin.tags.edit', compact('tag', 'colors'));
     }
 
     /**
@@ -55,7 +83,14 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'slug' => "required|unique:tags,slug,$tag->id",
+            'color' => 'required',
+        ]);
+
+        $tag->update($request->all());
+        return redirect()->route('admin.tags.edit', $tag)->with('info','The tag was updated');
     }
 
     /**
@@ -63,6 +98,8 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        //
+        $tag->delete();
+
+        return redirect()->route('admin.tags.index')->with('info', 'The tag was deleted');
     }
 }
