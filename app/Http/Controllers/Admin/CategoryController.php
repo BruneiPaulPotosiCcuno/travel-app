@@ -33,7 +33,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        
+
+        $request->validate([
+            'name' =>'required',
+            'slug' =>'required|unique:categories'
+        ]);
+
+       $category = Category::create($request->all());
+
+       return redirect()->route('admin.categories.edit', $category)->with('info', 'The category was created');
     }
 
     /**
@@ -57,14 +65,28 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        // Validar los datos de entrada
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => "required|string|max:255|unique:categories,slug,$category->id"
+        ]);
+    
+        
+        $category->update($request->all());
+    
+        
+        return redirect()->route('admin.categories.edit', $category)
+                         ->with('info', 'The category was updated');
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        return redirect()->route('admin.categories.index')->with('info', 'The category was deleted');
     }
 }
